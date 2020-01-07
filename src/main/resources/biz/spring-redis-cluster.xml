@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       ">
+	<context:annotation-config />
+	<bean id="stringCodec" class="org.redisson.client.codec.StringCodec"></bean>
+
+	<bean name="redisConfig" class="org.redisson.config.Config">
+		<property name="Codec" ref="stringCodec"></property>
+	</bean>
+	<bean name="redisConfigBase" class="io.zhangan.redis.RedisConf">
+		<constructor-arg name="config" ref="redisConfig" />
+		<constructor-arg name="connType" value="${redis.connType}" />
+		<constructor-arg name="nodesAddress" value="${redis.nodesAddress}" />
+		<constructor-arg name="password" value="${redis.password}" />
+	</bean>
+
+	<bean id="redisClientTemplate" class="io.zhangan.redis.RedissonTemplate" scope="singleton">
+		<property name="redisDataSource" ref="redisDataSource"></property>
+	</bean>
+	<bean id="redisDataSource" class="io.zhangan.redis.RedisSonDataSourceImpl" scope="singleton">
+		<property name="redisConf" ref="redisConfigBase"></property>
+	</bean>
+	<bean id="cacheOption" class="io.zhangan.redis.RedisCacheOption" scope="singleton">
+		<property name="redisClientTemplate" ref="redisClientTemplate"></property>
+		<property name="namespace" value="${redis.server.namespace}"></property>
+		<property name="timeOut" value="3600"></property><!-- 该配置暂不使用 -->
+	</bean>
+	<bean id="cacheOptionUtil" class="io.zhangan.redis.util.CacheOptionUtil" scope="singleton">
+		<property name="cacheOption" ref="cacheOption"></property>
+	</bean>
+</beans>
