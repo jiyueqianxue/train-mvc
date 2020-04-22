@@ -1,10 +1,9 @@
 package io.mine.ft.train.moshi.zerenlian.emp_1.handle;
 
-import org.springframework.stereotype.Component;
-
 import io.mine.ft.train.moshi.zerenlian.emp_1.context.TailContext;
 import io.mine.ft.train.moshi.zerenlian.emp_1.exp.EngineException;
 import io.mine.ft.train.moshi.zerenlian.emp_1.handlers.TailHandler;
+import io.mine.ft.train.moshi.zerenlian.emp_1.zhujie.HandlerAnnotation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -13,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author 2019年3月28日 下午8:20:07
  */
 @Slf4j
-@Component
+@HandlerAnnotation(desc = "结尾")
 public class StandardTailHandler extends TailHandler<Object> {
 
     @Override
